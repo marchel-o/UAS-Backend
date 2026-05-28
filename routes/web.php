@@ -1,27 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', function () {
-    // return view('welcome');
-    return redirect('/tickets');
+    return redirect()->route('tickets.index');
 });
 
-Route::view('/register', 'auth.register')->name('register')->middleware('guest');
-Route::view('/login', 'auth.login')->name('login')->middleware('guest');
+Route::middleware('guest')->group(function () {
+    Route::get('login', [UserController::class, 'showLogin'])->name('login');
+    
+    Route::post('login', [UserController::class, 'login'])->name('user.login'); 
+    
+    Route::get('register', [UserController::class, 'showRegister'])->name('register');
+    
+    Route::post('register', [UserController::class, 'register'])->name('user.register'); 
+});
 
-Route::middleware(['auth'])->group(function(){
-    Route::get('/', function(){
-        return redirect('/tickets');
-    })->name('tickets');
-
+Route::middleware('auth')->group(function () {
+    Route::post('logout', [UserController::class, 'logout'])->name('logout');
+    
     Route::resource('tickets', TicketController::class);
+    
+    Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
-
-Route::post('/register', [UserController::class, 'register'])->name('user.register');
-Route::post('/login', [UserController::class, 'login'])->name('user.login');
-Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');

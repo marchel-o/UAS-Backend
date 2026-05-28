@@ -1,33 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-    <form method="POST" action='{{ route("user.login") }}'>
+    <h2>Login</h2>
+
+    <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <p class="text-[1.5rem]">Login</p>
-        <label>Email</label>
-        <input class="border rounded" value="{{ old('email') }}"
-            name='email' type='email' required
-        />
-        
-        <label>Password</label>
-        <input class="border rounded"
-            name='password' required
-        />
+        <div>
+            <label>Email</label><br>
+            <input name="email" type="email" value="{{ old('email') }}" required />
+            @error('email') <div>{{ $message }}</div> @enderror
+        </div>
+        <br>
 
-        <button class="border-2 rounded p-2 hover:bg-green-300 transition-colors"
-            type="submit"
-        >
-            Login
-        </button>
-        
-        <p>Dont have an account? Click <a href="/register" class="text-blue-700 underline">here</a></p>
+        <div>
+            <label>Password</label><br>
+            <input name="password" type="password" required />
+            @error('password') <div>{{ $message }}</div> @enderror
+        </div>
+        <br>
 
-        @if($errors->any())
-            <p>Error!</p>
-            @foreach($errors->all() as $error)
-                <p>{{ $error }}</p>
-            @endforeach
-        @endif
+        <button type="submit">Login</button>
     </form>
+
+    <br>
+    <div>
+        Don't have an account? <a href="{{ route('register') }}">Register here</a>
+    </div>
 @endsection

@@ -8,69 +8,36 @@ use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $tickets = Ticket::all();
-        return view("tickets.index", compact("tickets"));
+        $tickets = Ticket::with('user')->latest()->get();
+        return view('tickets.index', compact('tickets'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view("tickets.create");
+        return view('tickets.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "title" => 'required|string|max:255',
-            "description" => 'required|string',
-            "priority" => 'required|string',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'priority' => 'required|in:low,medium,high,urgent'
         ]);
 
-        $validated["userId"] = Auth::id();
+        $validated['user_id'] = Auth::id();
+        $validated['status'] = 'open';
 
         Ticket::create($validated);
-        return redirect()->route("tickets.index")->with("success", "Ticket has been made");
+
+        return redirect()->route('tickets.index')->with('success', 'Laporan tiket berhasil dibuat.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Ticket $ticket)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Ticket $ticket)
-    {
-        //
+        $ticket->load('comments.user');
+        return view('tickets.show', compact('ticket'));
     }
 }
