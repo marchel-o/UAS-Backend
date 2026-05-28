@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class TicketController extends Controller
 {
@@ -15,6 +16,7 @@ class TicketController extends Controller
 
     public function create()
     {
+        $categories = Category::all();
         return view('tickets.create');
     }
 
@@ -30,7 +32,8 @@ class TicketController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'priority' => $request->priority,
-            'user_id' => 1
+            'user_id' => 1,
+            'category_id' => $request->category_id,
         ]);
 
         return redirect()->route('tickets.index');

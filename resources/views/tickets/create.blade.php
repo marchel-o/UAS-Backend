@@ -15,5 +15,19 @@
         <option value="urgent">Urgent</option>
     </select><br><br>
 
+    <div>
+    <label>Category</label>
+    <select name="category_id">
+        @foreach ($categories as $category)
+
+        <option value="{{ $category->id }}">
+            {{ $category->name }}
+        </option>
+
+        @endforeach
+
+    </select>
+    </div>
+
     <button type="submit">Simpan Tiket</button>
 </form>
