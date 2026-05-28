@@ -9,11 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('tickets', function (Blueprint $table) {
-            //
-        });
+    public function up(): void {
+        if (!Schema::hasColumn('tickets', 'category_id')) {
+
+            Schema::table('tickets', function (Blueprint $table) {
+
+                $table->foreignId('category_id')
+                    ->nullable()
+                    ->constrained()
+                    ->onDelete('set null');
+
+            });
+
+        }
     }
 
     /**

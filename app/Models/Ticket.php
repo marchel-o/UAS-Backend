@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-    protected $fillable = ['title', 'description', 'status', 'priority', 'user_id'];
+    protected $fillable = ['title', 'description', 'status', 'priority', 'user_id', 'category_id'];
 
     public function user()
     {
@@ -21,6 +21,6 @@ class Ticket extends Model
     public function category()
     {
         return $this->belongsTo(category::class);
-        
+
     }
 }

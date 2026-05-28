@@ -17,7 +17,7 @@ class TicketController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('tickets.create');
+        return view('tickets.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -32,8 +32,9 @@ class TicketController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'priority' => $request->priority,
-            'user_id' => 1,
             'category_id' => $request->category_id,
+            'user_id' => 1,
+
         ]);
 
         return redirect()->route('tickets.index');

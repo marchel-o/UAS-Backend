@@ -16,7 +16,7 @@
     </select><br><br>
 
     <div>
-    <label>Category</label>
+    <label>Kategori</label>
     <select name="category_id">
         @foreach ($categories as $category)
 
