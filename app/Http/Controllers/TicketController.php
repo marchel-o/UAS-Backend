@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
 
 class TicketController extends Controller
 {
@@ -16,7 +16,8 @@ class TicketController extends Controller
 
     public function create()
     {
-        return view('tickets.create');
+        $categories = Category::all();
+        return view('tickets.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -27,10 +28,14 @@ class TicketController extends Controller
             'priority' => 'required|in:low,medium,high,urgent'
         ]);
 
-        $validated['user_id'] = Auth::id();
-        $validated['status'] = 'open';
+        Ticket::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'priority' => $request->priority,
+            'category_id' => $request->category_id,
+            'user_id' => 1,
 
-        Ticket::create($validated);
+        ]);
 
         return redirect()->route('tickets.index')->with('success', 'Laporan tiket berhasil dibuat.');
     }
