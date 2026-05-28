@@ -7,6 +7,7 @@
         <th>Prioritas</th>
         <th>Status</th>
         <th>Aksi</th>
+        <th>Kategori</th>
     </tr>
     @foreach($tickets as $ticket)
     <tr>
@@ -15,6 +16,7 @@
         <td>{{ $ticket->priority }}</td>
         <td>{{ $ticket->status }}</td>
         <td><a href="{{ route('tickets.show', $ticket->id) }}">Detail</a></td>
+        <td>{{ $ticket->category->name ?? '-' }}</td>
     </tr>
     @endforeach
 </table>
