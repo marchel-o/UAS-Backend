@@ -44,7 +44,7 @@ class UserController extends Controller
         if(!Auth::attempt($credentials)){
             return back()->withErrors([
                 'password' => 'Wrong password',
-            ])->onlyInput('name');
+            ])->onlyInput('email');
         };
 
         $request->session()->regenerate();

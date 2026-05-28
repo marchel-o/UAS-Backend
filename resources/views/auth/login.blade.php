@@ -6,7 +6,7 @@
 
         <p class="text-[1.5rem]">Login</p>
         <label>Email</label>
-        <input class="border rounded"
+        <input class="border rounded" value="{{ old('email') }}"
             name='email' type='email' required
         />
         

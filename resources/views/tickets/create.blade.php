@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    <a href="/" class="text-blue-500">Go back</a>
     <form method="POST" action="{{ route('tickets.store') }}"
         class="flex flex-col max-w-[20rem] border-2 rounded p-4 gap-2"
     >
-        <!-- <p class="text-[1.5rem]">Make a ticket</p> -->
+        @csrf
+        
         <label for="title">Title</label>
         <input name="title" maxlength=40 class="border rounded p-2 w-full" />
         
