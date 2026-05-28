@@ -10,6 +10,8 @@
         @auth
             Halo, {{ ucwords(Auth::user()->full_name) }}! | 
             <a href="{{ route('tickets.index') }}">Beranda Tiket</a> |
+            <a href="{{ route('categories.index') }}">Kelola Kategori</a> | 
+            
             <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit">Logout</button>

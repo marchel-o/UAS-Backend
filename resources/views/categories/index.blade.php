@@ -1,25 +1,30 @@
-<h1>Daftar Category</h1>
+@extends('layouts.app')
 
-<a href="{{ route('categories.create') }}">
-    Tambah Category
-</a>
+@section('content')
+    <h2>Daftar Kategori Masalah</h2>
+    <a href="{{ route('categories.create') }}"><button>+ Tambah Kategori Baru</button></a>
+    <br><br>
 
-<br><br>
-
-<table border="1" cellpadding="10">
-
-    <tr>
-        <th>ID</th>
-        <th>Nama</th>
-    </tr>
-
-    @foreach ($categories as $category)
-
-    <tr>
-        <td>{{ $category->id }}</td>
-        <td>{{ $category->name }}</td>
-    </tr>
-
-    @endforeach
-
-</table>
+    <table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+        <thead style="background-color: #f4f4f4;">
+            <tr>
+                <th>No</th>
+                <th>Nama Kategori</th>
+                <th>Deskripsi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($categories as $index => $category)
+            <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $category->name }}</td>
+                <td>{{ $category->description }}</td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="3" align="center">Belum ada kategori. Silakan tambah baru.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+@endsection
