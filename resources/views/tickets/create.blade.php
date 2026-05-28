@@ -1,19 +1,7 @@
-<h1>Buat Tiket Baru</h1>
-<form action="{{ route('tickets.store') }}" method="POST">
-    @csrf
-    <label>Judul:</label><br>
-    <input type="text" name="title" required><br><br>
-    
-    <label>Deskripsi:</label><br>
-    <textarea name="description" required></textarea><br><br>
+@extends('layouts.app')
 
-    <label>Prioritas:</label><br>
-    <select name="priority">
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-        <option value="urgent">Urgent</option>
-    </select><br><br>
+@section('content')
+    <h2>Buat Tiket Baru</h2>
 
     <div>
     <label>Kategori</label>
@@ -31,3 +19,35 @@
 
     <button type="submit">Simpan Tiket</button>
 </form>
+    <form method="POST" action="{{ route('tickets.store') }}">
+        @csrf
+
+        <div>
+            <label>Judul</label><br>
+            <input type="text" name="title" value="{{ old('title') }}" required>
+            @error('title') <div>{{ $message }}</div> @enderror
+        </div>
+        <br>
+
+        <div>
+            <label>Deskripsi</label><br>
+            <textarea name="description" required>{{ old('description') }}</textarea>
+            @error('description') <div>{{ $message }}</div> @enderror
+        </div>
+        <br>
+
+        <div>
+            <label>Prioritas</label><br>
+            <select name="priority">
+                <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
+                <option value="urgent" {{ old('priority') == 'urgent' ? 'selected' : '' }}>Urgent</option>
+            </select>
+        </div>
+        <br>
+
+        <button type="submit">Simpan</button>
+        <a href="{{ route('tickets.index') }}">Batal</a>
+    </form>
+@endsection

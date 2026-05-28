@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function store(Request $request, $ticketId)
+    public function store(Request $request, Ticket $ticket)
     {
-        $request->validate(['content' => 'required']);
-
-        Comment::create([
-            'ticket_id' => $ticketId,
-            'user_id' => 1,
-            'content' => $request->content
+        $validated = $request->validate([
+            'content' => 'required|string|max:1000'
         ]);
 
-        return back();
+        $ticket->comments()->create([
+            'user_id' => Auth::id(),
+            'content' => $validated['content']
+        ]);
+
+        return back()->with('success', 'Balasan berhasil ditambahkan.');
     }
 }

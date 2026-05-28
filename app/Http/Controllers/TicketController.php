@@ -10,7 +10,7 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('user')->get();
+        $tickets = Ticket::with('user')->latest()->get();
         return view('tickets.index', compact('tickets'));
     }
 
@@ -22,10 +22,10 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'priority' => 'required'
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'priority' => 'required|in:low,medium,high,urgent'
         ]);
 
         Ticket::create([
@@ -37,11 +37,12 @@ class TicketController extends Controller
 
         ]);
 
-        return redirect()->route('tickets.index');
+        return redirect()->route('tickets.index')->with('success', 'Laporan tiket berhasil dibuat.');
     }
 
     public function show(Ticket $ticket)
     {
+        $ticket->load('comments.user');
         return view('tickets.show', compact('ticket'));
     }
 }
