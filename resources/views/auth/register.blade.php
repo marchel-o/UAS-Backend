@@ -1,38 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-    <form method="POST" action='{{ route("user.register") }}'>
+    <h2>Register Account</h2>
+    
+    <form method="POST" action="{{ route('register') }}">
         @csrf
-
-        <p class="text-[1.5rem]">Register</p>
-        <label>Email</label>
-        <input class="border rounded"
-            name='email' type='email' required
-        />
-
-        <label>Name</label>
-        <input class="border rounded"
-            name='name' required maxlength=100 
-        />
         
-        <label>Password</label>
-        <input class="border rounded"
-            name='password' required
-        />
+        <div>
+            <label>Full Name</label><br>
+            <input name="full_name" type="text" value="{{ old('full_name') }}" required />
+            @error('full_name') <div>{{ $message }}</div> @enderror
+        </div>
+        <br>
 
-        <button class="border rounded p-2 hover:bg-green-400 transition-colors"
-            type="submit"
-        >
-            Create Account
-        </button>
+        <div>
+            <label>Email</label><br>
+            <input name="email" type="email" value="{{ old('email') }}" required />
+            @error('email') <div>{{ $message }}</div> @enderror
+        </div>
+        <br>
+        
+        <div>
+            <label>Password</label><br>
+            <input name="password" type="password" required />
+            @error('password') <div>{{ $message }}</div> @enderror
+        </div>
+        <br>
 
-        <p>Already have an account? Click <a href="/login" class="text-blue-700 underline">here</a></p>
+        <div>
+            <label>Confirm Password</label><br>
+            <input name="password_confirmation" type="password" required />
+        </div>
+        <br>
 
-        @if($errors->any())
-            <p>Error!</p>
-            @foreach($errors->all() as $error)
-                <p>{{ $error }}</p>
-            @endforeach
-        @endif
+        <button type="submit">Create Account</button>
     </form>
+
+    <br>
+    <div>
+        Already have an account? <a href="{{ route('login') }}">Login here</a>
+    </div>
 @endsection
