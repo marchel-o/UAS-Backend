@@ -19,6 +19,6 @@ class CommentController extends Controller
             'content' => $validated['content']
         ]);
 
-        return back()->with('success', 'Balasan berhasil ditambahkan.');
+        return back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 }
