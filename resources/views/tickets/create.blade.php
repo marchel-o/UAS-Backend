@@ -1,19 +1,29 @@
-<h1>Buat Tiket Baru</h1>
-<form action="{{ route('tickets.store') }}" method="POST">
-    @csrf
-    <label>Judul:</label><br>
-    <input type="text" name="title" required><br><br>
-    
-    <label>Deskripsi:</label><br>
-    <textarea name="description" required></textarea><br><br>
+@extends('layouts.app')
 
-    <label>Prioritas:</label><br>
-    <select name="priority">
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-        <option value="urgent">Urgent</option>
-    </select><br><br>
+@section('content')
+    <a href="/" class="text-blue-500">Go back</a>
+    <form method="POST" action="{{ route('tickets.store') }}"
+        class="flex flex-col max-w-[20rem] border-2 rounded p-4 gap-2"
+    >
+        @csrf
+        
+        <label for="title">Title</label>
+        <input name="title" maxlength=40 class="border rounded p-2 w-full" />
+        
+        <label for="description">Description</label>
+        <textarea name="description" rows=5 class="resize-none border rounded p-2"></textarea>
+        
+        <label for="priority">Priority</label>
+        <select name="priority" class="border rounded px-2 py-1">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
 
-    <button type="submit">Simpan Tiket</button>
-</form>
+        <button type="submit" 
+            class="border rounded mt-2 p-2 hover:bg-green-300 transition-colors"
+        >
+            Submit Ticket
+        </button>
+    </form>
+@endsection

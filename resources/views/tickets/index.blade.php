@@ -1,20 +1,13 @@
-<h1>Daftar Tiket Laporan</h1>
-<a href="{{ route('tickets.create') }}">Buat Tiket Baru</a>
-<table border="1" cellpadding="10" style="margin-top: 10px; border-collapse: collapse;">
-    <tr>
-        <th>ID</th>
-        <th>Judul</th>
-        <th>Prioritas</th>
-        <th>Status</th>
-        <th>Aksi</th>
-    </tr>
-    @foreach($tickets as $ticket)
-    <tr>
-        <td>{{ $ticket->id }}</td>
-        <td>{{ $ticket->title }}</td>
-        <td>{{ $ticket->priority }}</td>
-        <td>{{ $ticket->status }}</td>
-        <td><a href="{{ route('tickets.show', $ticket->id) }}">Detail</a></td>
-    </tr>
-    @endforeach
-</table>
+@extends('layouts.app')
+
+@section('content')
+    <div class="flex flex-col max-w-[20rem] gap-4">
+        <p class="text-xl">Halo, {{ Auth::user()->name }}</p>
+        
+        <button class="border-2 rounded p-2 hover:bg-gray-300 transition-colors"
+            onclick="window.location.href='{{ route('tickets.create') }}'"
+        >
+            Buat Tiket
+        </button>
+    </div>
+@endsection
