@@ -43,4 +43,31 @@ class TicketController extends Controller
         $ticket->load(['comments.user', 'category']);
         return view('tickets.show', compact('ticket'));
     }
+
+    use App\Models\TicketHistory;
+
+    public function update(Request $request, $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $oldStatus = $ticket->status;
+
+        $ticket->update([
+            'status' => $request->status
+        ]);
+
+        TicketHistory::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'old_status' => $oldStatus,
+            'new_status' => $request->status,
+            'notes' => $request->notes
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status ticket berhasil diupdate',
+            'ticket' => $ticket
+        ]);
+    }
 }
