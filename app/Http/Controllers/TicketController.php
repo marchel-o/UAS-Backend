@@ -9,10 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = Ticket::with(['user', 'category'])->latest()->get();
-        return view('tickets.index', compact('tickets'));
+        $query = Ticket::with(['user', 'category'])->latest()->get();
+
+        if ($request->category_id) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $tickets = $query->latest()->get();
+        $categories = Category::all();
+
+        return view('tickets.index', compact('tickets', 'categories'));
     }
 
     public function create()
