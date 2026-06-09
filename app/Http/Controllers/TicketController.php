@@ -11,7 +11,7 @@ class TicketController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Ticket::with(['user', 'category'])->latest()->get();
+        $query = Ticket::with(['user', 'category']);
 
         if ($request->category_id) {
             $query->where('category_id', $request->category_id);
