@@ -13,10 +13,15 @@ class TicketController extends Controller
     public function index()
     {
         $tickets = Ticket::with(['user', 'category'])
-            ->latest()
-            ->get();
+        ->latest()
+        ->get();
 
-        return view('tickets.index', compact('tickets'));
+        $categories = Category::all();
+
+        return view(
+        'tickets.index',
+        compact('tickets', 'categories')
+        );
     }
 
     public function create()

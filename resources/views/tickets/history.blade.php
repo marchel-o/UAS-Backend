@@ -21,7 +21,7 @@
                     @forelse($ticket->histories as $history)
                         <tr>
                             <td>{{ $history->created_at }}</td>
-                            <td>{{ $history->user->name ?? '-' }}</td>
+                            <td>{{ $history->user->full_name ?? '-' }}</td>
                             <td>{{ $history->old_status }}</td>
                             <td>{{ $history->new_status }}</td>
                             <td>{{ $history->notes }}</td>
