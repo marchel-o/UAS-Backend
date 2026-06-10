@@ -10,15 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = Ticket::with(['user', 'category'])
-        ->latest()
-        ->get();
+        $query= Ticket::with(['user', 'category']);
 
         if ($request->category_id) {
             $query->where('category_id', $request->category_id);
-        }
+        };
         
         $user = Auth::user();
         
@@ -26,14 +24,14 @@ class TicketController extends Controller
             $query->where('user_id', $user->id)->latest()->get();
         } else{
             $query->latest()->get();
-        }
+        };
         
         $tickets = $query->latest()->get();
         $categories = Category::all();
 
         return view(
-        'tickets.index',
-        compact('tickets', 'categories')
+            'tickets.index',
+            compact('tickets', 'categories')
         );
     }
 
