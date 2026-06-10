@@ -1,9 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Sistem Tiket Kampus</title>
-</head>
 <body>
     <nav>
         <strong>Sistem Tiket Kampus</strong> | 

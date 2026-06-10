@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="p-3">
     <h2>Login</h2>
 
-    <form method="POST" action="{{ route('login') }}">
+    <form class="mt-2" method="POST" action="{{ route('login') }}">
         @csrf
 
         <div>
@@ -27,4 +28,5 @@
     <div>
         Don't have an account? <a href="{{ route('register') }}">Register here</a>
     </div>
+</div>
 @endsection

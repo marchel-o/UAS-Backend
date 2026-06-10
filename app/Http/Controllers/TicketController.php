@@ -66,6 +66,7 @@ class TicketController extends Controller
         $oldStatus = $ticket->status;
         $newStatus = $request->status;
 
+        // Simpan history hanya jika status berubah
         if ($oldStatus !== $newStatus) {
 
             $ticket->update([

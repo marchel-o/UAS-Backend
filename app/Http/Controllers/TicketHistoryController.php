@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-use Illuminate\Http\Request;
 
 class TicketHistoryController extends Controller
 {
@@ -13,10 +12,6 @@ class TicketHistoryController extends Controller
             'histories.user'
         ])->findOrFail($ticketId);
 
-        return response()->json([
-            'success' => true,
-            'ticket_id' => $ticket->id,
-            'history' => $ticket->histories
-        ]);
+        return view('tickets.history', compact('ticket'));
     }
 }

@@ -6,6 +6,46 @@
     <p><strong>Pelapor:</strong> {{ $ticket->user->full_name ?? 'Anonim' }}</p>
     <p><strong>Kategori:</strong> {{ $ticket->category->name ?? 'Tidak ada kategori' }}</p>
     <p><strong>Status:</strong> {{ strtoupper($ticket->status) }}</p>
+    <hr>
+
+<h4>Ubah Status Ticket</h4>
+
+<form method="POST" action="{{ route('tickets.update', $ticket->id) }}">
+    @csrf
+    @method('PUT')
+
+    <select name="status">
+        <option value="open" {{ $ticket->status == 'open' ? 'selected' : '' }}>
+            OPEN
+        </option>
+
+        <option value="in_progress" {{ $ticket->status == 'in_progress' ? 'selected' : '' }}>
+            IN PROGRESS
+        </option>
+
+        <option value="resolved" {{ $ticket->status == 'resolved' ? 'selected' : '' }}>
+            RESOLVED
+        </option>
+
+        <option value="closed" {{ $ticket->status == 'closed' ? 'selected' : '' }}>
+            CLOSED
+        </option>
+    </select>
+
+    <br><br>
+
+    <textarea name="notes"
+        placeholder="Catatan perubahan status"
+        style="width:100%;height:60px;"></textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Update Status
+    </button>
+</form>
+
+<hr>
     <p><strong>Prioritas:</strong> {{ strtoupper($ticket->priority) }}</p>
     
     <div>
@@ -39,5 +79,15 @@
     </form>
 
     <br><br>
-    <a href="{{ route('tickets.index') }}">Kembali ke Daftar Tiket</a>
+
+<a href="{{ route('tickets.history', $ticket->id) }}">
+    Lihat History Ticket
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="{{ route('tickets.index') }}">
+    Kembali ke Daftar Tiket
+</a>
+
 @endsection
