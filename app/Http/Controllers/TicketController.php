@@ -11,7 +11,13 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with(['user', 'category'])->latest()->get();
+        $user = Auth::user();
+        if ($user->role === 'user'){
+            $tickets = Ticket::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+        } else{
+            $tickets = Ticket::with(['user', 'category'])->latest()->get();
+        }
+
         return view('tickets.index', compact('tickets'));
     }
 
