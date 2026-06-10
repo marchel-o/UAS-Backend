@@ -16,6 +16,19 @@ class TicketController extends Controller
         ->latest()
         ->get();
 
+        if ($request->category_id) {
+            $query->where('category_id', $request->category_id);
+        }
+        
+        $user = Auth::user();
+        
+        if ($user->role === 'user'){
+            $query->where('user_id', $user->id)->latest()->get();
+        } else{
+            $query->latest()->get();
+        }
+        
+        $tickets = $query->latest()->get();
         $categories = Category::all();
 
         return view(
