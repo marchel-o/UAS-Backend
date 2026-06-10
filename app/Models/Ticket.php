@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\TicketHistory;
 
 class Ticket extends Model
 {
@@ -28,5 +30,10 @@ class Ticket extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(TicketHistory::class);
     }
 }

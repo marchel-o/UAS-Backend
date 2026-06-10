@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TicketHistoryController;
 
 Route::get('/', function () {
     return redirect()->route('tickets.index');
@@ -24,4 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
 
     Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
-});
+    Route::get(
+        '/tickets/{id}/history',
+        [TicketHistoryController::class, 'index']
+    )->name('tickets.history');
+    });
