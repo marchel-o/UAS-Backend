@@ -25,9 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
 
     Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
-});
-
-Route::get('/tickets/{id}/history', [
-    TicketHistoryController::class,
-    'index'
-]);
+    Route::get(
+        '/tickets/{id}/history',
+        [TicketHistoryController::class, 'index']
+    )->name('tickets.history');
+    });
