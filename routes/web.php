@@ -7,14 +7,15 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TicketHistoryController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\RatingController;
 
-// Halaman utama otomatis dialihkan ke daftar tiket
+// Redirect awal
 Route::get('/', function () {
     return redirect()->route('tickets.index');
 });
 
 // ========================================================
-// GRUP ROUTE UNTUK YANG BELUM LOGIN (GUEST)
+// GRUP ROUTE GUEST (BELUM LOGIN)
 // ========================================================
 Route::middleware('guest')->group(function () {
     Route::get('login', [UserController::class, 'showLogin'])->name('login');
@@ -24,35 +25,38 @@ Route::middleware('guest')->group(function () {
 });
 
 // ========================================================
-// GRUP ROUTE UNTUK YANG SUDAH LOGIN (AUTH)
+// GRUP ROUTE AUTH (SUDAH LOGIN)
 // ========================================================
 Route::middleware('auth')->group(function () {
     
-    // Fitur Autentikasi
     Route::post('logout', [UserController::class, 'logout'])->name('logout');
     
-    // Fitur Tiket & Komentar
-    Route::resource('tickets', TicketController::class);
-    Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
-
-    // Fitur Kategori & Histori Tiket
-    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
-    Route::get('/tickets/{id}/history', [TicketHistoryController::class, 'index'])->name('tickets.history');
-
-    // ========================================================
-    // 📢 FITUR PENGUMUMAN / INFO KAMPUS
-    // ========================================================
+    // Fitur Tiket
+    Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
+    Route::get('tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+    Route::post('tickets', [TicketController::class, 'store'])->name('tickets.store');
     
-    // Sisi User (Mahasiswa/Staff) untuk melihat info
+    Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+    Route::put('tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
+    
+    // TAMBAHKAN RUTE INI UNTUK HAPUS TIKET
+    Route::delete('tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
+    
+    // Histori, Komentar, & Rating
+    Route::get('tickets/{ticket}/history', [TicketHistoryController::class, 'index'])->name('tickets.history');
+    Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('tickets/{ticket}/rate', [RatingController::class, 'store'])->name('tickets.rate');
+
+    // Fitur Kategori
+    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
+
+    // Pengumuman & Admin Pengumuman (Sesuai kode asli Anda)
     Route::get('/pengumuman', [AnnouncementController::class, 'index'])->name('announcements.index');
     Route::get('/pengumuman/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
 
-    // Sisi Admin untuk mengelola info (CRUD Lengkap)
     Route::get('/admin/pengumuman', [AnnouncementController::class, 'adminDashboard'])->name('announcements.admin');
     Route::get('/admin/pengumuman/create', [AnnouncementController::class, 'create'])->name('announcements.create');
     Route::post('/admin/pengumuman', [AnnouncementController::class, 'store'])->name('announcements.store');
-    
-    // Rute Edit & Hapus (WAJIB ADA agar tidak error RouteNotFound)
     Route::get('/admin/pengumuman/{id}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
     Route::put('/admin/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
     Route::delete('/admin/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');

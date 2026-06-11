@@ -13,21 +13,17 @@ class TicketController extends Controller
     // Menampilkan daftar tiket
     public function index(Request $request)
     {
-        // 1. Inisialisasi Query dengan Relasi
         $query = Ticket::with(['user', 'category']);
 
-        // 2. Filter berdasarkan Kategori (jika dipilih)
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
         
-        // 3. Filter berdasarkan Role (Admin lihat semua, User hanya lihat milik sendiri)
         $user = Auth::user();
         if ($user->role === 'user') {
             $query->where('user_id', $user->id);
         }
         
-        // 4. Eksekusi query dengan urutan terbaru
         $tickets = $query->latest()->get();
         $categories = Category::all();
 
@@ -41,7 +37,7 @@ class TicketController extends Controller
         return view('tickets.create', compact('categories'));
     }
 
-    // Menyimpan tiket baru ke database
+    // Menyimpan tiket baru
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -56,9 +52,7 @@ class TicketController extends Controller
 
         Ticket::create($validated);
 
-        return redirect()
-            ->route('tickets.index')
-            ->with('success', 'Laporan tiket berhasil dibuat.');
+        return redirect()->route('tickets.index')->with('success', 'Laporan tiket berhasil dibuat.');
     }
 
     // Menampilkan detail tiket
@@ -91,8 +85,17 @@ class TicketController extends Controller
             ]);
         }
 
-        return redirect()
-            ->route('tickets.show', $ticket->id)
-            ->with('success', 'Status tiket berhasil diperbarui.');
+        return redirect()->route('tickets.show', $ticket->id)->with('success', 'Status tiket diperbarui.');
+    }
+
+    // Menghapus tiket (Admin only)
+    public function destroy(Ticket $ticket)
+    {
+        if (Auth::user()->role !== 'admin') {
+            return redirect()->route('tickets.index')->with('error', 'Tidak memiliki izin.');
+        }
+
+        $ticket->delete();
+        return redirect()->route('tickets.index')->with('success', 'Tiket berhasil dihapus.');
     }
 }
