@@ -8,6 +8,8 @@
             <a href="{{ route('tickets.index') }}">Beranda Tiket</a> |
             <a href="{{ route('categories.index') }}">Kelola Kategori</a> | 
             
+            <a href="{{ route('announcements.index') }}">Info Kampus</a> | 
+            
             <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit">Logout</button>

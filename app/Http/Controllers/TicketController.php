@@ -10,38 +10,38 @@ use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
+    // Menampilkan daftar tiket
     public function index(Request $request)
     {
-        $query= Ticket::with(['user', 'category']);
+        // 1. Inisialisasi Query dengan Relasi
+        $query = Ticket::with(['user', 'category']);
 
-        if ($request->category_id) {
+        // 2. Filter berdasarkan Kategori (jika dipilih)
+        if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
-        };
+        }
         
+        // 3. Filter berdasarkan Role (Admin lihat semua, User hanya lihat milik sendiri)
         $user = Auth::user();
+        if ($user->role === 'user') {
+            $query->where('user_id', $user->id);
+        }
         
-        if ($user->role === 'user'){
-            $query->where('user_id', $user->id)->latest()->get();
-        } else{
-            $query->latest()->get();
-        };
-        
+        // 4. Eksekusi query dengan urutan terbaru
         $tickets = $query->latest()->get();
         $categories = Category::all();
 
-        return view(
-            'tickets.index',
-            compact('tickets', 'categories')
-        );
+        return view('tickets.index', compact('tickets', 'categories'));
     }
 
+    // Menampilkan form buat tiket
     public function create()
     {
         $categories = Category::all();
-
         return view('tickets.create', compact('categories'));
     }
 
+    // Menyimpan tiket baru ke database
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -61,16 +61,14 @@ class TicketController extends Controller
             ->with('success', 'Laporan tiket berhasil dibuat.');
     }
 
+    // Menampilkan detail tiket
     public function show(Ticket $ticket)
     {
-        $ticket->load([
-            'comments.user',
-            'category'
-        ]);
-
+        $ticket->load(['comments.user', 'category']);
         return view('tickets.show', compact('ticket'));
     }
 
+    // Mengupdate status tiket
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -78,16 +76,11 @@ class TicketController extends Controller
         ]);
 
         $ticket = Ticket::findOrFail($id);
-
         $oldStatus = $ticket->status;
         $newStatus = $request->status;
 
-        // Simpan history hanya jika status berubah
         if ($oldStatus !== $newStatus) {
-
-            $ticket->update([
-                'status' => $newStatus
-            ]);
+            $ticket->update(['status' => $newStatus]);
 
             TicketHistory::create([
                 'ticket_id' => $ticket->id,
@@ -100,6 +93,6 @@ class TicketController extends Controller
 
         return redirect()
             ->route('tickets.show', $ticket->id)
-            ->with('success', 'Status ticket berhasil diperbarui.');
+            ->with('success', 'Status tiket berhasil diperbarui.');
     }
 }
