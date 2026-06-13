@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\Category;
+use App\Models\TicketHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,28 +12,33 @@ class TicketController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Ticket::with(['user', 'category']);
+        $query= Ticket::with(['user', 'category']);
 
         if ($request->category_id) {
             $query->where('category_id', $request->category_id);
-        }
-  
+        };
+        
         $user = Auth::user();
-      
+        
         if ($user->role === 'user'){
-            $tickets = Ticket::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+            $query->where('user_id', $user->id)->latest()->get();
         } else{
-            $tickets = Ticket::with(['user', 'category'])->latest()->get();
-        }
-    
+            $query->latest()->get();
+        };
+        
+        $tickets = $query->latest()->get();
         $categories = Category::all();
 
-        return view('tickets.index', compact('tickets', 'categories'));
+        return view(
+            'tickets.index',
+            compact('tickets', 'categories')
+        );
     }
 
     public function create()
     {
         $categories = Category::all();
+
         return view('tickets.create', compact('categories'));
     }
 
@@ -50,12 +56,50 @@ class TicketController extends Controller
 
         Ticket::create($validated);
 
-        return redirect()->route('tickets.index')->with('success', 'Laporan tiket berhasil dibuat.');
+        return redirect()
+            ->route('tickets.index')
+            ->with('success', 'Laporan tiket berhasil dibuat.');
     }
 
     public function show(Ticket $ticket)
     {
-        $ticket->load(['comments.user', 'category']);
+        $ticket->load([
+            'comments.user',
+            'category'
+        ]);
+
         return view('tickets.show', compact('ticket'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:open,in_progress,resolved,closed'
+        ]);
+
+        $ticket = Ticket::findOrFail($id);
+
+        $oldStatus = $ticket->status;
+        $newStatus = $request->status;
+
+        // Simpan history hanya jika status berubah
+        if ($oldStatus !== $newStatus) {
+
+            $ticket->update([
+                'status' => $newStatus
+            ]);
+
+            TicketHistory::create([
+                'ticket_id' => $ticket->id,
+                'user_id' => Auth::id(),
+                'old_status' => $oldStatus,
+                'new_status' => $newStatus,
+                'notes' => $request->notes
+            ]);
+        }
+
+        return redirect()
+            ->route('tickets.show', $ticket->id)
+            ->with('success', 'Status ticket berhasil diperbarui.');
     }
 }
