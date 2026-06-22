@@ -26,8 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('tickets', TicketController::class);
     Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
     
-    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
-    Route::resource('faqs', FAQController::class)->only(['index', 'create', 'store']);
+    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('faqs', FAQController::class)->only(['index', 'create', 'store', 'destroy']);
 
     Route::resource('profile', ProfileController::class);
     Route::put('/profile/edit-value', [ProfileController::class, 'editValue'])->name('profile.editValue');

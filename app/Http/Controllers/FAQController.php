@@ -30,4 +30,13 @@ class FAQController extends Controller
         ]);
         return redirect()->route('faqs.index');
     }
+
+    public function destroy(FAQ $faq) {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+        $faq->delete();
+        
+        return redirect()->route('faqs.index');
+    }
 }

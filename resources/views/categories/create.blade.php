@@ -13,13 +13,6 @@
         </div>
         <br>
 
-        <div>
-            <label>Deskripsi Kategori</label><br>
-            <textarea name="description" required style="height: 80px; width: 300px;">{{ old('description') }}</textarea>
-            @error('description') <div style="color:red;">{{ $message }}</div> @enderror
-        </div>
-        <br>
-
         <button type="submit">Simpan Kategori</button>
         <a href="{{ route('categories.index') }}" style="margin-left: 10px;">Batal</a>
     </form>
