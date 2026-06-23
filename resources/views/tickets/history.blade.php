@@ -7,14 +7,14 @@
     <div class="card">
         <div class="card-body">
 
-            <table class="table table-bordered">
+            <table border="1" cellpadding="12" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Tanggal</th>
-                        <th>User</th>
-                        <th>Status Lama</th>
-                        <th>Status Baru</th>
-                        <th>Catatan</th>
+                        <th style="padding:10px;">Tanggal</th>
+                        <th style="padding:10px;">User</th>
+                        <th style="padding:10px;">Status Lama</th>
+                        <th style="padding:10px;">Status Baru</th>
+                        <th style="padding:10px;">Catatan</th>
                     </tr>
                 </thead>
                 <tbody>
