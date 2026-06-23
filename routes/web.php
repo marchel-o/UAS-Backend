@@ -50,7 +50,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/pengumuman/{id}/edit', [AnnouncementController::class, 'edit'])->name('edit');
         Route::put('/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('update');
         Route::delete('/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('destroy');
-  
+    });
+    
     Route::resource('profile', ProfileController::class);
     Route::put('/profile/edit-value', [ProfileController::class, 'editValue'])->name('profile.editValue');
 
