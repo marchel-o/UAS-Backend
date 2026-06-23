@@ -5,8 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm border-0 p-4">
-                <h3 class="fw-bold mb-4">➕ Buat Pengumuman Baru</h3>
+                <h3 class="fw-bold mb-4"> Buat Pengumuman Baru</h3>
                 
+                {{-- PERBAIKAN: Memastikan action mengarah ke name route store admin yang benar --}}
                 <form action="{{ route('announcements.store') }}" method="POST">
                     @csrf
                     
@@ -33,6 +34,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 mt-4">
+                        {{-- PERBAIKAN: Memastikan tombol batal mengarah ke dashboard admin pengumuman --}}
                         <a href="{{ route('announcements.admin') }}" class="btn btn-light">Batal</a>
                         <button type="submit" class="btn btn-primary">Terbitkan Pengumuman</button>
                     </div>

@@ -9,7 +9,7 @@ use App\Http\Controllers\TicketHistoryController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\RatingController;
 
-// Redirect awal
+// Redirect awal langsung ke halaman login jika belum auth, atau ke tiket jika sudah
 Route::get('/', function () {
     return redirect()->route('tickets.index');
 });
@@ -31,33 +31,35 @@ Route::middleware('auth')->group(function () {
     
     Route::post('logout', [UserController::class, 'logout'])->name('logout');
     
-    // Fitur Tiket
+    // Fitur Tiket (User & Admin)
     Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
     Route::get('tickets/create', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('tickets', [TicketController::class, 'store'])->name('tickets.store');
-    
     Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
     Route::put('tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
-    
-    // TAMBAHKAN RUTE INI UNTUK HAPUS TIKET
     Route::delete('tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
     
-    // Histori, Komentar, & Rating
+    // Histori, Komentar
     Route::get('tickets/{ticket}/history', [TicketHistoryController::class, 'index'])->name('tickets.history');
     Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
+    
+    // FITUR RATING (Pastikan RatingController kalian memvalidasi status 'resolved')
     Route::post('tickets/{ticket}/rate', [RatingController::class, 'store'])->name('tickets.rate');
 
     // Fitur Kategori
     Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
 
-    // Pengumuman & Admin Pengumuman (Sesuai kode asli Anda)
+    // === PENGUMUMAN SISI USER / MAHASISWA ===
     Route::get('/pengumuman', [AnnouncementController::class, 'index'])->name('announcements.index');
     Route::get('/pengumuman/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
 
-    Route::get('/admin/pengumuman', [AnnouncementController::class, 'adminDashboard'])->name('announcements.admin');
-    Route::get('/admin/pengumuman/create', [AnnouncementController::class, 'create'])->name('announcements.create');
-    Route::post('/admin/pengumuman', [AnnouncementController::class, 'store'])->name('announcements.store');
-    Route::get('/admin/pengumuman/{id}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
-    Route::put('/admin/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
-    Route::delete('/admin/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    // === PENGUMUMAN SISI ADMIN (DIPROTEKSI URL-NYA) ===
+    Route::prefix('admin')->name('announcements.')->group(function () {
+        Route::get('/pengumuman', [AnnouncementController::class, 'adminDashboard'])->name('admin');
+        Route::get('/pengumuman/create', [AnnouncementController::class, 'create'])->name('create');
+        Route::post('/pengumuman', [AnnouncementController::class, 'store'])->name('store');
+        Route::get('/pengumuman/{id}/edit', [AnnouncementController::class, 'edit'])->name('edit');
+        Route::put('/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('update');
+        Route::delete('/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('destroy');
+    });
 });

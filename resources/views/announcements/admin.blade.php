@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>🛠️ Panel Kelola Info Kampus (Admin)</h2>
+        <h2> Panel Kelola Info Kampus (Admin)</h2>
         <div>
             <a href="{{ route('announcements.index') }}" class="btn btn-outline-secondary btn-sm me-2">Lihat Sisi User</a>
             <a href="{{ route('announcements.create') }}" class="btn btn-success btn-sm">➕ Tambah Pengumuman</a>
@@ -33,8 +33,14 @@
                     @forelse($announcements as $index => $info)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td><strong class="text-dark">{{ $info->judul }}</strong></td>
-                            <td><span class="badge bg-secondary">{{ $info->kategori }}</span></td>
+                            <td>
+                                {{-- PERBAIKAN: Mengamankan Judul --}}
+                                <strong class="text-dark">{{ $info->title ?? $info->judul }}</strong>
+                            </td>
+                            <td>
+                                {{-- PERBAIKAN: Mengamankan Kategori --}}
+                                <span class="badge bg-secondary">{{ $info->category ?? $info->kategori }}</span>
+                            </td>
                             <td>{{ $info->created_at->format('d-m-Y') }}</td>
                             <td>
                                 <a href="{{ route('announcements.edit', $info->id) }}" class="btn btn-warning btn-sm text-white">Edit</a>
