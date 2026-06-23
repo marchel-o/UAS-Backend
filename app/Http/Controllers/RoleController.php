@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
     public function index(){
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Akses ditolak!');
+        }
+
         $users = User::all();
         return view('role.index', compact('users'));
     }
