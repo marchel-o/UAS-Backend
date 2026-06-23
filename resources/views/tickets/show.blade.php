@@ -4,7 +4,7 @@
 <div class="container">
     {{-- Header Tiket --}}
     <h2>#{{ $ticket->id }} - {{ $ticket->title }}</h2>
-    <p><strong>Pelapor:</strong> {{ $ticket->user->name }}</p>
+    <p><strong>Pelapor:</strong> {{ $ticket->user->full_name }}</p>
     <p><strong>Kategori:</strong> {{ $ticket->category->name }}</p>
     <p><strong>Status:</strong> {{ strtoupper($ticket->status) }}</p>
 
@@ -47,7 +47,7 @@
     <h5>Diskusi & Komentar</h5>
     <ul>
         @forelse($ticket->comments as $comment)
-        <li><strong>{{ $comment->user->name }}:</strong> {{ $comment->content }}</li>
+        <li><strong>{{ $comment->user->full_name }}:</strong> {{ $comment->content }}</li>
         @empty
         <li>Belum ada komentar untuk tiket ini.</li>
         @endforelse
