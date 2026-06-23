@@ -10,7 +10,7 @@
             <tr>
                 <th>No</th>
                 <th>Nama Kategori</th>
-                <th>Deskripsi</th>
+                <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -18,7 +18,12 @@
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $category->name }}</td>
-                <td>{{ $category->description }}</td>
+                <td>
+                    <form action ="{{ route('categories.destroy', $category->id) }}" method = "POST">
+                        @csrf 
+                        @method('DELETE')
+                        <button type = "submit">Hapus</button>
+                    </form>
             </tr>
             @empty
             <tr>

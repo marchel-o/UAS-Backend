@@ -9,7 +9,11 @@
             @auth
                 <p style="margin: 0;">Halo, {{ ucwords(Auth::user()->full_name) }}!</p> | 
                 <a href="{{ route('tickets.index') }}">Beranda Tiket</a> |
+
+                @if(Auth::user()->role === 'admin') 
                 <a href="{{ route('categories.index') }}">Kelola Kategori</a> | 
+                @endif
+                
                 <a href="{{ route('faqs.index') }}">FAQ</a> |
                 <a href="{{ route('announcements.index') }}">Info Kampus</a> |
                 <a href="{{ route('profile.index') }}">Pengaturan</a> | 

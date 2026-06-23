@@ -38,8 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('tickets/{ticket}/rate', [RatingController::class, 'store'])->name('tickets.rate');  
   
-    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
-    Route::resource('faqs', FAQController::class)->only(['index', 'create', 'store']);
+    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('faqs', FAQController::class)->only(['index', 'create', 'store', 'destroy']);
 
     Route::get('/pengumuman', [AnnouncementController::class, 'index'])->name('announcements.index');
     Route::get('/pengumuman/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
