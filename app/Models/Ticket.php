@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\TicketHistory;
 
 class Ticket extends Model
 {
+    use HasFactory; // Jangan lupa tambahkan trait ini
+
     protected $fillable = [
         'title', 
         'description', 
@@ -35,5 +36,12 @@ class Ticket extends Model
     public function histories()
     {
         return $this->hasMany(TicketHistory::class);
+    }
+
+    // RELASI RATING YANG DIPERBAIKI
+    public function rating()
+    {
+        // Menambahkan foreign key secara eksplisit untuk keamanan
+        return $this->hasOne(Rating::class, 'ticket_id');
     }
 }

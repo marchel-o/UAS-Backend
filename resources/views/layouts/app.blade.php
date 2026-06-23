@@ -15,6 +15,7 @@
                 @endif
                 
                 <a href="{{ route('faqs.index') }}">FAQ</a> |
+                <a href="{{ route('announcements.index') }}">Info Kampus</a> |
                 <a href="{{ route('profile.index') }}">Pengaturan</a> | 
                 
                 <form action="{{ route('logout') }}" method="POST" style="display:inline;">
