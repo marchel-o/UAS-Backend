@@ -17,6 +17,7 @@
                 <a href="{{ route('faqs.index') }}">FAQ</a> |
                 <a href="{{ route('announcements.index') }}">Info Kampus</a> |
                 <a href="{{ route('profile.index') }}">Pengaturan</a> | 
+                <a href="{{ route('contact') }}">Kontak Bantuan</a> |
                 
                 <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                     @csrf
