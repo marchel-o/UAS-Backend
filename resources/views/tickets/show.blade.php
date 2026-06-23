@@ -69,5 +69,9 @@
     @else
         <p>Belum ada rating untuk tiket ini.</p>
     @endif
+
+    <a href="{{ route('tickets.history', $ticket->id) }}">
+        Lihat History Ticket
+    </a>
 </div>
 @endsection
