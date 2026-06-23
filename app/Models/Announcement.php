@@ -9,6 +9,16 @@ class Announcement extends Model
 {
     use HasFactory;
 
-    // Daftarkan kolom database agar bisa diinput secara massal
-    protected $fillable = ['judul', 'isi', 'kategori'];
+    // Tambahkan nama tabel jika nama tabel kalian di DB adalah 'announcements'
+    protected $table = 'announcements';
+
+    // PERBAIKAN UTAMA: Daftarkan kolom database kalian di dalam $fillable!
+    // Ini gunanya agar Laravel mengizinkan input judul, kategori, dan isi masuk ke SQLite.
+    protected $fillable = [
+        'judul',
+        'kategori',
+        'isi',
+        // JIKA di database kalian nama kolomnya bahasa inggris, ganti dengan baris di bawah ini:
+        // 'title', 'category', 'description'
+    ];
 }

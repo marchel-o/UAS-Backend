@@ -7,12 +7,18 @@
             <a href="{{ route('announcements.index') }}" class="btn btn-light btn-sm mb-3">← Kembali ke Daftar</a>
             
             <div class="card shadow-sm border-0 p-4">
-                <span class="badge bg-primary align-self-start mb-2">{{ $announcement->kategori }}</span>
-                <h1 class="fw-bold mb-2">{{ $announcement->judul }}</h1>
+                {{-- PERBAIKAN: Mengamankan kategori --}}
+                <span class="badge bg-primary align-self-start mb-2">{{ $announcement->category ?? $announcement->kategori }}</span>
+                
+                {{-- PERBAIKAN: Mengamankan judul --}}
+                <h1 class="fw-bold mb-2">{{ $announcement->title ?? $announcement->judul }}</h1>
+                
                 <small class="text-muted mb-4 d-block">Tanggal Terbit: {{ $announcement->created_at->format('d F Y, H:i') }}</small>
                 <hr>
+                
                 <div class="fs-5 text-secondary" style="line-height: 1.8; white-space: pre-line;">
-                    {{ $announcement->isi }}
+                    {{-- PERBAIKAN UTAMA: Mengatasi deskripsi/isi yang tidak tampil --}}
+                    {{ $announcement->description ?? ($announcement->content ?? ($announcement->isi ?? $announcement->konten)) }}
                 </div>
             </div>
         </div>

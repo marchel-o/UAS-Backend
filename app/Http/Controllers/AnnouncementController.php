@@ -48,14 +48,21 @@ class AnnouncementController extends Controller
             abort(403, 'Akses ditolak!');
         }
 
+        // 1. Validasi input dari Form HTML
         $request->validate([
             'judul' => 'required|string|max:255',
             'isi' => 'required',
             'kategori' => 'required',
         ]);
 
-        Announcement::create($request->only(['judul', 'isi', 'kategori']));
+        // 2. PERBAIKAN: Menggunakan kolom Bahasa Indonesia sesuai struktur tabel SQLite
+        Announcement::create([
+            'judul'    => $request->judul,
+            'isi'      => $request->isi, 
+            'kategori' => $request->kategori,
+        ]);
 
+        // 3. Redirect kembali ke halaman Kelola Pengumuman Admin
         return redirect()->route('announcements.admin')->with('success', 'Pengumuman berhasil diterbitkan!');
     }
 
@@ -73,7 +80,19 @@ class AnnouncementController extends Controller
         if (Auth::user()->role !== 'admin') abort(403, 'Akses ditolak!');
         
         $announcement = Announcement::findOrFail($id);
-        $announcement->update($request->all());
+        
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'isi' => 'required',
+            'kategori' => 'required',
+        ]);
+
+        // PERBAIKAN: Menggunakan kolom Bahasa Indonesia saat update data
+        $announcement->update([
+            'judul'    => $request->judul,
+            'isi'      => $request->isi,
+            'kategori' => $request->kategori,
+        ]);
 
         return redirect()->route('announcements.admin')->with('success', 'Pengumuman berhasil diupdate!');
     }

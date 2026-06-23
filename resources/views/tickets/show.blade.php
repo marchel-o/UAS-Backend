@@ -1,12 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container py-4">
+    {{-- Notifikasi Sukses / Gagal --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     {{-- Header Tiket --}}
     <h2>#{{ $ticket->id }} - {{ $ticket->title }}</h2>
     <p><strong>Pelapor:</strong> {{ $ticket->user->full_name }}</p>
     <p><strong>Kategori:</strong> {{ $ticket->category->name }}</p>
-    <p><strong>Status:</strong> {{ strtoupper($ticket->status) }}</p>
+    <p><strong>Status:</strong> <span class="badge bg-info text-dark">{{ strtoupper($ticket->status) }}</span></p>
 
     <hr>
 
@@ -25,7 +39,9 @@
         <textarea name="notes" class="form-control mt-2" placeholder="Catatan perubahan status"></textarea>
         <button type="submit" class="btn btn-secondary mt-2">Update Status</button>
     </form>
+    
     <hr>
+    
     @endif
 
     {{-- Detail Tiket --}}
@@ -44,8 +60,8 @@
     <hr>
 
     {{-- Diskusi & Komentar --}}
-    <h5>Diskusi & Komentar</h5>
-    <ul>
+    <h5> Diskusi & Komentar</h5>
+    <ul class="list-group mb-3">
         @forelse($ticket->comments as $comment)
         <li><strong>{{ $comment->user->full_name }}:</strong> {{ $comment->content }}</li>
         @empty
@@ -57,13 +73,13 @@
     <form action="{{ route('comments.store', $ticket->id) }}" method="POST" class="mb-4">
         @csrf
         <textarea name="content" class="form-control" required placeholder="Tulis komentar..."></textarea>
-        <button type="submit" class="btn btn-primary mt-2">Kirim Komentar</button>
+        <button type="submit" class="btn btn-primary btn-sm mt-2">Kirim Komentar</button>
     </form>
 
     <hr>
 
-    {{-- Bagian Rating --}}
-    <h5>Penilaian</h5>
+    {{-- Bagian Rating Pelayanan --}}
+    <h5> Penilaian Pelayanan</h5>
     @if($ticket->rating)
     <p>Skor: {{ $ticket->rating->score }} Bintang | Ulasan: {{ $ticket->rating->comment }}</p>
     @elseif(strtolower($ticket->status) === 'closed' && auth()->id() === $ticket->user_id)
@@ -78,5 +94,9 @@
     @else
     <p>Belum ada rating untuk tiket ini.</p>
     @endif
+
+    <a href="{{ route('tickets.history', $ticket->id) }}">
+        Lihat History Ticket
+    </a>
 </div>
 @endsection

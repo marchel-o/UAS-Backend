@@ -11,6 +11,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\FAQController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RoleController;
 
 Route::get('/', function () {
     return redirect()->route('tickets.index');
@@ -37,23 +38,28 @@ Route::middleware('auth')->group(function () {
 
     Route::get('tickets/{ticket}/history', [TicketHistoryController::class, 'index'])->name('tickets.history');
     Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
-    Route::post('tickets/{ticket}/rate', [RatingController::class, 'store'])->name('tickets.rate');
-
-    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
-    Route::resource('faqs', FAQController::class)->only(['index', 'create', 'store']);
+    Route::post('tickets/{ticket}/rate', [RatingController::class, 'store'])->name('tickets.rate');  
+  
+    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('faqs', FAQController::class)->only(['index', 'create', 'store', 'destroy']);
 
     Route::get('/pengumuman', [AnnouncementController::class, 'index'])->name('announcements.index');
     Route::get('/pengumuman/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
 
-    Route::get('/admin/pengumuman', [AnnouncementController::class, 'adminDashboard'])->name('announcements.admin');
-    Route::get('/admin/pengumuman/create', [AnnouncementController::class, 'create'])->name('announcements.create');
-    Route::post('/admin/pengumuman', [AnnouncementController::class, 'store'])->name('announcements.store');
-    Route::get('/admin/pengumuman/{id}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
-    Route::put('/admin/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
-    Route::delete('/admin/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    Route::prefix('admin')->name('announcements.')->group(function () {
+        Route::get('/pengumuman', [AnnouncementController::class, 'adminDashboard'])->name('admin');
+        Route::get('/pengumuman/create', [AnnouncementController::class, 'create'])->name('create');
+        Route::post('/pengumuman', [AnnouncementController::class, 'store'])->name('store');
+        Route::get('/pengumuman/{id}/edit', [AnnouncementController::class, 'edit'])->name('edit');
+        Route::put('/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('update');
+        Route::delete('/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('destroy');
+    });
+    
+    Route::get('users', [RoleController::class, 'index'])->name('users.index');
+    Route::put('users/update-role', [RoleController::class, 'update'])->name('role.update');
 
-    Route::resource('profile', ProfileController::class);
-    Route::put('/profile/edit-value', [ProfileController::class, 'editValue'])->name('profile.editValue');
+    Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
