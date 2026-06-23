@@ -28,7 +28,6 @@ Route::middleware('auth')->group(function () {
     Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
     Route::get('tickets/create', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('tickets', [TicketController::class, 'store'])->name('tickets.store');
-    
     Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
     Route::put('tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
     
@@ -44,12 +43,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengumuman', [AnnouncementController::class, 'index'])->name('announcements.index');
     Route::get('/pengumuman/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
 
-    Route::get('/admin/pengumuman', [AnnouncementController::class, 'adminDashboard'])->name('announcements.admin');
-    Route::get('/admin/pengumuman/create', [AnnouncementController::class, 'create'])->name('announcements.create');
-    Route::post('/admin/pengumuman', [AnnouncementController::class, 'store'])->name('announcements.store');
-    Route::get('/admin/pengumuman/{id}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
-    Route::put('/admin/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
-    Route::delete('/admin/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    Route::prefix('admin')->name('announcements.')->group(function () {
+        Route::get('/pengumuman', [AnnouncementController::class, 'adminDashboard'])->name('admin');
+        Route::get('/pengumuman/create', [AnnouncementController::class, 'create'])->name('create');
+        Route::post('/pengumuman', [AnnouncementController::class, 'store'])->name('store');
+        Route::get('/pengumuman/{id}/edit', [AnnouncementController::class, 'edit'])->name('edit');
+        Route::put('/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('update');
+        Route::delete('/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('destroy');
   
     Route::resource('profile', ProfileController::class);
     Route::put('/profile/edit-value', [ProfileController::class, 'editValue'])->name('profile.editValue');
