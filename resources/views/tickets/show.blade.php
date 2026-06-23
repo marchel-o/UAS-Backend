@@ -1,93 +1,73 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
+    {{-- Header Tiket --}}
     <h2>#{{ $ticket->id }} - {{ $ticket->title }}</h2>
-    
-    <p><strong>Pelapor:</strong> {{ $ticket->user->full_name ?? 'Anonim' }}</p>
-    <p><strong>Kategori:</strong> {{ $ticket->category->name ?? 'Tidak ada kategori' }}</p>
+    <p><strong>Pelapor:</strong> {{ $ticket->user->name }}</p>
+    <p><strong>Kategori:</strong> {{ $ticket->category->name }}</p>
     <p><strong>Status:</strong> {{ strtoupper($ticket->status) }}</p>
+
     <hr>
 
-<h4>Ubah Status Ticket</h4>
+    {{-- Bagian Ubah Status (Admin Only) --}}
+    @if(auth()->user()->role === 'admin')
+        <h5>Ubah Status Ticket</h5>
+        <form action="{{ route('tickets.update', $ticket->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <select name="status" class="form-control">
+                <option value="open" {{ $ticket->status == 'open' ? 'selected' : '' }}>OPEN</option>
+                <option value="in_progress" {{ $ticket->status == 'in_progress' ? 'selected' : '' }}>IN_PROGRESS</option>
+                <option value="resolved" {{ $ticket->status == 'resolved' ? 'selected' : '' }}>RESOLVED</option>
+                <option value="closed" {{ $ticket->status == 'closed' ? 'selected' : '' }}>CLOSED</option>
+            </select>
+            <textarea name="notes" class="form-control mt-2" placeholder="Catatan perubahan status"></textarea>
+            <button type="submit" class="btn btn-secondary mt-2">Update Status</button>
+        </form>
+        <hr>
+    @endif
 
-<form method="POST" action="{{ route('tickets.update', $ticket->id) }}">
-    @csrf
-    @method('PUT')
-
-    <select name="status">
-        <option value="open" {{ $ticket->status == 'open' ? 'selected' : '' }}>
-            OPEN
-        </option>
-
-        <option value="in_progress" {{ $ticket->status == 'in_progress' ? 'selected' : '' }}>
-            IN PROGRESS
-        </option>
-
-        <option value="resolved" {{ $ticket->status == 'resolved' ? 'selected' : '' }}>
-            RESOLVED
-        </option>
-
-        <option value="closed" {{ $ticket->status == 'closed' ? 'selected' : '' }}>
-            CLOSED
-        </option>
-    </select>
-
-    <br><br>
-
-    <textarea name="notes"
-        placeholder="Catatan perubahan status"
-        style="width:100%;height:60px;"></textarea>
-
-    <br><br>
-
-    <button type="submit">
-        Update Status
-    </button>
-</form>
-
-<hr>
+    {{-- Detail Tiket --}}
     <p><strong>Prioritas:</strong> {{ strtoupper($ticket->priority) }}</p>
-    
-    <div>
-        <strong>Deskripsi Detail:</strong><br>
-        {{ $ticket->description }}
-    </div>
-    
+    <p><strong>Deskripsi Detail:</strong><br>{{ $ticket->description }}</p>
+
     <hr>
 
-    <h3>Diskusi & Komentar</h3>
+    {{-- Diskusi & Komentar --}}
+    <h5>Diskusi & Komentar</h5>
     <ul>
         @forelse($ticket->comments as $comment)
-            <li style="margin-bottom: 10px;">
-                <strong>{{ $comment->user->full_name ?? 'Seseorang' }}</strong> berkata:<br>
-                {{ $comment->content }}
-            </li>
+            <li><strong>{{ $comment->user->name }}:</strong> {{ $comment->content }}</li>
         @empty
             <li>Belum ada komentar untuk tiket ini.</li>
         @endforelse
     </ul>
 
-    <hr>
-
-    <h4>Tambahkan Komentar</h4>
-    <form method="POST" action="{{ route('comments.store', $ticket->id) }}">
+    <h5>Tambahkan Komentar</h5>
+    <form action="{{ route('comments.store', $ticket->id) }}" method="POST" class="mb-4">
         @csrf
-        <textarea name="content" required style="width: 100%; height: 70px;"></textarea><br>
-        @error('content') <div style="color:red;">{{ $message }}</div> @enderror
-        <br>
-        <button type="submit">Kirim Balasan</button>
+        <textarea name="content" class="form-control" required placeholder="Tulis komentar..."></textarea>
+        <button type="submit" class="btn btn-primary mt-2">Kirim Komentar</button>
     </form>
 
-    <br><br>
+    <hr>
 
-<a href="{{ route('tickets.history', $ticket->id) }}">
-    Lihat History Ticket
-</a>
-
-&nbsp;|&nbsp;
-
-<a href="{{ route('tickets.index') }}">
-    Kembali ke Daftar Tiket
-</a>
-
+    {{-- Bagian Rating --}}
+    <h5>Penilaian</h5>
+    @if($ticket->rating)
+        <p>Skor: {{ $ticket->rating->score }} Bintang | Ulasan: {{ $ticket->rating->comment }}</p>
+    @elseif(strtolower($ticket->status) === 'closed' && auth()->id() === $ticket->user_id)
+        <form action="{{ route('tickets.rate', $ticket->id) }}" method="POST">
+            @csrf
+            <select name="score" class="form-control mb-2">
+                @for($i=5; $i>=1; $i--) <option value="{{ $i }}">{{ $i }} Bintang</option> @endfor
+            </select>
+            <textarea name="comment" class="form-control mb-2" placeholder="Tulis ulasan Anda..."></textarea>
+            <button type="submit" class="btn btn-success">Kirim Penilaian</button>
+        </form>
+    @else
+        <p>Belum ada rating untuk tiket ini.</p>
+    @endif
+</div>
 @endsection
