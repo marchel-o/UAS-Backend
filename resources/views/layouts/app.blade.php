@@ -15,13 +15,17 @@
                     <a href="{{ route('categories.index') }}">Kelola Kategori</a> | 
                 @endif
                 
-                <a href="{{ route('faqs.index') }}">FAQ</a> |
-                
                 @if(Auth::user()->role === 'admin')
-                    <a href="{{ route('announcements.admin') }}" style="font-weight: bold; color: blue;">Kelola Pengumuman (Admin)</a> |
+                    <a href="{{ route('announcements.admin') }}">Kelola Pengumuman</a> |
                 @else
                     <a href="{{ route('announcements.index') }}">Info Kampus</a> |
                 @endif
+
+                @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('users.index') }}">Kelola Pengguna</a> |
+                @endif
+
+                <a href="{{ route('faqs.index') }}">FAQ</a> |
                 
                 <a href="{{ route('profile.index') }}">Pengaturan</a> | 
                 

@@ -53,6 +53,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('destroy');
     });
     
+    Route::get('users', [RoleController::class, 'index'])->name('users.index');
+    Route::put('users/update-role', [RoleController::class, 'update'])->name('role.update');
+
     Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
