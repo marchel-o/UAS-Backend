@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class AuthController extends Controller
 {
     public function showLogin() {
         return view('auth.login');
@@ -25,7 +25,7 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'full_name' => ucwords(strtolower($validated['full_name'])),
+            'full_name' => strtolower($validated['full_name']),
             'email' => strtolower($validated['email']),
             'password' => Hash::make($validated['password']),
             'role' => 'user'

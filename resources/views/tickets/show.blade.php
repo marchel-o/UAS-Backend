@@ -105,5 +105,9 @@
              Penilaian hanya dapat diberikan oleh pemilik tiket setelah status pengaduan di-ubah menjadi <b>RESOLVED</b> atau <b>CLOSED</b> oleh admin.
         </div>
     @endif
+
+    <a href="{{ route('tickets.history', $ticket->id) }}">
+        Lihat History Ticket
+    </a>
 </div>
 @endsection
