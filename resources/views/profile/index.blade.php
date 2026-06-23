@@ -7,7 +7,7 @@
     </div>
 
     <form 
-        id="namaForm" method="POST" action="{{ route('profile.editValue') }}" 
+        id="namaForm" method="POST" action="{{ route('profile.update') }}" 
         style="display: none; gap: 1rem; margin-top: .5rem;"
     >
         @csrf
@@ -20,7 +20,7 @@
     </div>
 
     <form 
-        id="emailForm" method="POST" action="{{ route('profile.editValue') }}"
+        id="emailForm" method="POST" action="{{ route('profile.update') }}"
         style="display: none; gap: 1rem; margin-top: .5rem;"
     >
         @csrf
@@ -38,18 +38,12 @@
     </div>
 
     <form 
-        id="passwordForm" method="POST" action="{{ route('profile.editValue') }}"
+        id="passwordForm" method="POST" action="{{ route('profile.update') }}"
         style="display: none; gap: 1rem; margin-top: .5rem;"
     >
         @csrf
         @method('PUT')
     </form>
-
-    @if(session('error'))
-        <div style="margin-top: 2rem;">
-            {{ session('error') }}
-        </div>
-    @endif
 
     <script>
         const cancelForm = (name) => {
@@ -87,9 +81,6 @@
                 newInput2.type = "password";
                 newInput2.name = `new${name.charAt(0).toUpperCase() + name.slice(1)}_confirmation`;
                 newInput2.min = "8";
-
-                const cancelButton = document.createElement('button');
-                cancelButton.textContent = "Cancel";
                 
                 const saveButton = document.createElement('button');
                 saveButton.textContent = "Save";
@@ -99,7 +90,7 @@
                     oldLabel, oldInput,
                     newLabel1, newInput1,
                     newLabel2, newInput2,
-                    cancelButton, saveButton
+                    saveButton
                 );
 
                 formElement.style.flexDirection = "column";
@@ -115,15 +106,12 @@
                     titleInput.type = "text";
                 }
                 titleInput.name = "value";
-    
-                const cancelButton = document.createElement('button');
-                cancelButton.textContent = "Cancel";
                 
                 const saveButton = document.createElement('button');
                 saveButton.textContent = "Save";
                 saveButton.type = "submit"
 
-                formElement.append(typeInput, titleLabel, titleInput, cancelButton, saveButton);
+                formElement.append(typeInput, titleLabel, titleInput, saveButton);
             }
             
             formElement.style.display = "flex";

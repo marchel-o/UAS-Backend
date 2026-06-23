@@ -13,8 +13,9 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h4 class="card-title fw-bold text-dark mb-0">{{ $info->judul }}</h4>
-                            <span class="badge bg-info text-dark fw-semibold">{{ $info->kategori }}</span>
+                            {{-- PERBAIKAN: Menggunakan properti dari Database/Controller --}}
+                            <h4 class="card-title fw-bold text-dark mb-0">{{ $info->title ?? $info->judul }}</h4>
+                            <span class="badge bg-info text-dark fw-semibold">{{ $info->category ?? $info->kategori }}</span>
                         </div>
                         
                         <p class="text-muted small mb-3">
@@ -24,7 +25,8 @@
                         <hr>
                         
                         <p class="card-text text-secondary" style="white-space: pre-line;">
-                            {{ $info->konten }}
+                            {{-- PERBAIKAN UTAMA: Mengatasi $info->konten yang kosong/tidak terbaca --}}
+                            {{ $info->description ?? ($info->content ?? ($info->isi ?? $info->konten)) }}
                         </p>
                     </div>
                 </div>
