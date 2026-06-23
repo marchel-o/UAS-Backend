@@ -10,20 +10,14 @@
                 <p style="margin: 0;">Halo, {{ ucwords(Auth::user()->full_name) }}!</p> | 
                 
                 <a href="{{ route('tickets.index') }}">Beranda Tiket</a> |
-                <a href="{{ route('dashboard.index') }}">Dashboard</a> |
-                
-                @if(Auth::user()->role === 'admin') 
-                    <a href="{{ route('categories.index') }}">Kelola Kategori</a> | 
-                @endif
                 
                 @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('dashboard.index') }}">Dashboard</a> |
+                    <a href="{{ route('categories.index') }}">Kelola Kategori</a> | 
                     <a href="{{ route('announcements.admin') }}">Kelola Pengumuman</a> |
+                    <a href="{{ route('users.index') }}">Kelola Pengguna</a> |
                 @else
                     <a href="{{ route('announcements.index') }}">Info Kampus</a> |
-                @endif
-
-                @if(Auth::user()->role === 'admin')
-                    <a href="{{ route('users.index') }}">Kelola Pengguna</a> |
                 @endif
 
                 <a href="{{ route('faqs.index') }}">FAQ</a> |
