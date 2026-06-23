@@ -10,6 +10,7 @@ use App\Http\Controllers\TicketHistoryController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\FAQController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleController;
 
 Route::get('/', function () {
@@ -25,15 +26,16 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
     Route::get('tickets/create', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('tickets', [TicketController::class, 'store'])->name('tickets.store');
+
     Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
     Route::put('tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
-    
+
     Route::delete('tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
-    
+
     Route::get('tickets/{ticket}/history', [TicketHistoryController::class, 'index'])->name('tickets.history');
     Route::post('tickets/{ticket}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('tickets/{ticket}/rate', [RatingController::class, 'store'])->name('tickets.rate');  
@@ -58,6 +60,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::resource('categories', CategoryController::class)->only(['index', 'create', 'store']);
 
     Route::get(
         '/tickets/{id}/history',

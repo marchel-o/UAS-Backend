@@ -45,11 +45,17 @@ class TicketController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
-            'priority' => 'required|in:low,medium,high,urgent'
+            'priority' => 'required|in:low,medium,high,urgent',
+            'attachment' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $validated['user_id'] = Auth::id();
         $validated['status'] = 'open';
+
+        if ($request->hasFile('attachment')) {
+            $path = $request->file('attachment')->store('attachments', 'public');
+            $validated['attachment'] = $path;
+        }
 
         Ticket::create($validated);
 

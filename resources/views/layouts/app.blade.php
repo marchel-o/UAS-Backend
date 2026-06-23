@@ -10,7 +10,8 @@
                 <p style="margin: 0;">Halo, {{ ucwords(Auth::user()->full_name) }}!</p> | 
                 
                 <a href="{{ route('tickets.index') }}">Beranda Tiket</a> |
-
+                <a href="{{ route('dashboard.index') }}">Dashboard</a> |
+                
                 @if(Auth::user()->role === 'admin') 
                     <a href="{{ route('categories.index') }}">Kelola Kategori</a> | 
                 @endif
