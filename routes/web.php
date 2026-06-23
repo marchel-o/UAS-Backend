@@ -10,6 +10,7 @@ use App\Http\Controllers\TicketHistoryController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\FAQController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleController;
 
@@ -69,3 +70,8 @@ Route::middleware('auth')->group(function () {
         [TicketHistoryController::class, 'index']
     )->name('tickets.history');
 });
+
+Route::get('/contact', [
+    ContactController::class,
+    'index'
+])->name('contact');
