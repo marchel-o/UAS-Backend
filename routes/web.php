@@ -10,6 +10,7 @@ use App\Http\Controllers\TicketHistoryController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\FAQController;
+use App\Http\Controllers\RoleController;
 
 Route::get('/', function () {
     return redirect()->route('tickets.index');
@@ -52,8 +53,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('destroy');
     });
     
-    Route::resource('profile', ProfileController::class);
-    Route::put('/profile/edit-value', [ProfileController::class, 'editValue'])->name('profile.editValue');
+    Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get(
         '/tickets/{id}/history',
